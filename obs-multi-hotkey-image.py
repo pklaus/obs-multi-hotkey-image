@@ -45,9 +45,9 @@ def script_load(settings):
 
     # create Hotkey in global OBS Settings
     for i, image in enumerate(get_available_images()):
-        name = f"SHORTCUT {i}"
+        name = f"SHORTCUT {image}"
         kotkey_id = obs.obs_hotkey_register_frontend(
-            name, f"Multi-Hotkey-Image: '{image}'", hotkey_callback_factory(image)
+            name, f"Multi-Hotkey-Image {image}", hotkey_callback_factory(image)
         )
         hotkeys[kotkey_id] = name
 
