@@ -2,7 +2,7 @@
 
 """
 Reveal any image from a folder using a dedicated hotkey.
-Works in push-to-show mode by default.
+Can be used in push-to-show or push-to-toggle mode.
 The hotkey for each image file can be configured
 in the "Hotkeys" section of OBS' settings.
 
@@ -14,8 +14,8 @@ import enum, glob, os, re
 
 
 class Mode(enum.Enum):
-    PushToShow = enum.auto()
-    PushToToggle = enum.auto()
+    PushToShow = "Push to Show"
+    PushToToggle = "Push to Toggle"
 
 
 hotkeys = {}
@@ -76,12 +76,7 @@ def script_update(settings):
 
     image_folder = obs.obs_data_get_string(settings, "image_folder")
 
-    toggle_mode = obs.obs_data_get_bool(settings, "toggle_mode")
-    toggle_mode
-    if toggle_mode:
-        mode = Mode.PushToToggle
-    else:
-        mode = Mode.PushToShow
+    mode = Mode(obs.obs_data_get_string(settings, "mode_select_list"))
 
     if mode == Mode.PushToShow:
         set_source_visibility(show=False)
@@ -117,7 +112,15 @@ def script_properties():
         image_folder,
     )
 
-    obs.obs_properties_add_bool(props, "toggle_mode", "toggle mode")
+    drop_list = obs.obs_properties_add_list(
+        props,
+        "mode_select_list",
+        "Mode",
+        obs.OBS_COMBO_TYPE_LIST,
+        obs.OBS_COMBO_FORMAT_STRING,
+    )
+    obs.obs_property_list_add_string(drop_list, "Push to Show", Mode.PushToShow.value)
+    obs.obs_property_list_add_string(drop_list, "Push to Toggle (visibility)", Mode.PushToToggle.value)
 
     return props
 
@@ -129,6 +132,7 @@ def script_description():
 
 def script_defaults(settings):
     obs.obs_data_set_default_string(settings, "image_folder", image_folder)
+    obs.obs_data_set_default_string(settings, "mode_select_list", Mode.PushToShow.value)
 
 
 def hotkey_callback_factory(image: str):
