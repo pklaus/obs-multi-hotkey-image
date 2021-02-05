@@ -13,9 +13,9 @@ import obspython as obs
 import enum, glob, os, re
 
 
-class Mode(enum.Enum):
-    PushToShow = "Push to Show"
-    PushToToggle = "Push to Toggle"
+class Mode(enum.IntEnum):
+    PushToShow = 1
+    PushToToggle = 2
 
 
 hotkeys = {}
@@ -76,7 +76,7 @@ def script_update(settings):
 
     image_folder = obs.obs_data_get_string(settings, "image_folder")
 
-    mode = Mode(obs.obs_data_get_string(settings, "mode_select_list"))
+    mode = Mode(obs.obs_data_get_int(settings, "mode_select_list"))
 
     if mode == Mode.PushToShow:
         set_source_visibility(show=False)
@@ -117,10 +117,10 @@ def script_properties():
         "mode_select_list",
         "Mode",
         obs.OBS_COMBO_TYPE_LIST,
-        obs.OBS_COMBO_FORMAT_STRING,
+        obs.OBS_COMBO_FORMAT_INT,
     )
-    obs.obs_property_list_add_string(drop_list, "Push to Show", Mode.PushToShow.value)
-    obs.obs_property_list_add_string(drop_list, "Push to Toggle (visibility)", Mode.PushToToggle.value)
+    obs.obs_property_list_add_int(drop_list, "Push to Show", Mode.PushToShow)
+    obs.obs_property_list_add_int(drop_list, "Push to Toggle", Mode.PushToToggle)
 
     return props
 
@@ -132,7 +132,7 @@ def script_description():
 
 def script_defaults(settings):
     obs.obs_data_set_default_string(settings, "image_folder", image_folder)
-    obs.obs_data_set_default_string(settings, "mode_select_list", Mode.PushToShow.value)
+    obs.obs_data_set_default_int(settings, "mode_select_list", Mode.PushToShow)
 
 
 def hotkey_callback_factory(image: str):
