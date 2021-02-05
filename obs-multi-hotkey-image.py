@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""
+Reveal any image from a folder using a dedicated hotkey.
+Works in push-to-show mode by default.
+The hotkey for each image file can be configured
+in the "Hotkeys" section of OBS' settings.
+
+By @pklaus
+"""
+
 import obspython as obs
 import enum, glob, os, re
 
@@ -112,10 +123,8 @@ def script_properties():
 
 
 def script_description():
-    return "Reveal any image from a folder using a dedicated hotkey.\n" \
-           "Works in push-to-show mode by default.\n" \
-           "The hotkey for each image file can be configured "\
-           "in OBS' Settings→Hotkeys menu.\n\nBy @pklaus"
+    return __doc__
+
 
 
 def script_defaults(settings):
