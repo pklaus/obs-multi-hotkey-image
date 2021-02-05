@@ -32,7 +32,7 @@ def get_available_images():  # -> List[str]:
         for f in all_files_in_image_folder
         if re.match(r".*\.(bmp|tga|png|jpeg|jpg|gif|psd|webp)$", f)
     ]
-    return [os.path.basename(i) for i in all_image_files]
+    return sorted([os.path.basename(i) for i in all_image_files])
 
 
 def full_image_path(image: str) -> str:
